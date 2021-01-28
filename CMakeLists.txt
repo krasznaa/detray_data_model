@@ -9,6 +9,7 @@ set( CMAKE_CXX_STANDARD 17 CACHE STRING "The (host) C++ standard to use" )
 set( CMAKE_CUDA_STANDARD 14 CACHE STRING "The (CUDA) C++ standard to use" )
 
 # Standard CMake include(s).
+include( CTest )
 include( GNUInstallDirs )
 
 # Build a (static) library with the data model code.
@@ -24,3 +25,11 @@ target_include_directories( DetrayCudaDataModel PUBLIC
 # Build the test for using the allocator(s) in the host code.
 add_executable( test_host_allocations tests/test_host_allocations.cpp )
 target_link_libraries( test_host_allocations DetrayCudaDataModel )
+add_test( NAME test_host_allocations
+       COMMAND test_host_allocations )
+
+# Build the test for using the custom vector in device code.
+add_executable( test_vector_on_device tests/test_vector_on_device.cu )
+target_link_libraries( test_vector_on_device DetrayCudaDataModel )
+add_test( NAME test_vector_on_device
+       COMMAND test_vector_on_device )
