@@ -11,15 +11,16 @@ set( CMAKE_CUDA_STANDARD 14 CACHE STRING "The (CUDA) C++ standard to use" )
 # Standard CMake include(s).
 include( GNUInstallDirs )
 
-# Build a (static) library with the memory allocator code.
-add_library( detrayCudaAllocators
+# Build a (static) library with the data model code.
+add_library( DetrayCudaDataModel
    core/cuda_error_check.cuh core/cuda_error_check.cu
    allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu
-   allocators/managed_allocator.hpp )
-target_include_directories( detrayCudaAllocators PUBLIC
+   allocators/managed_allocator.hpp
+   vector/vector.hpp )
+target_include_directories( DetrayCudaDataModel PUBLIC
    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> )
 
 # Build the test for using the allocator(s) in the host code.
 add_executable( test_host_allocations tests/test_host_allocations.cpp )
-target_link_libraries( test_host_allocations detrayCudaAllocators )
+target_link_libraries( test_host_allocations DetrayCudaDataModel )
