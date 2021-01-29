@@ -1,9 +1,9 @@
 // Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
-#define DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
+#ifndef DETRAY_DATA_MODEL_HOST_ALLOCATOR_HPP
+#define DETRAY_DATA_MODEL_HOST_ALLOCATOR_HPP
 
 // Local include(s).
-#include "managed_allocator_base.hpp"
+#include "host_allocator_base.hpp"
 
 // System include(s).
 #include <cstddef>
@@ -11,12 +11,16 @@
 
 namespace detray::cuda {
 
-   /// CUDA managed memory allocator to use with STL container types
+   /// CUDA host memory allocator to use with STL container types
+   ///
+   /// Making sure that the memory created for the STL container on the host
+   /// would be page-locked. (Not allowed to be moved to swap, or any other part
+   /// of the memory.)
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
    template< typename TYPE >
-   class managed_allocator : public managed_allocator_base {
+   class host_allocator : public host_allocator_base {
 
    public:
       /// @name Type definitions that need to be provided by the allocator
@@ -36,11 +40,6 @@ namespace detray::cuda {
       typedef std::true_type is_always_equal;
       /// @}
 
-      /// Default constructor
-      managed_allocator() = default;
-      /// Destructor
-      ~managed_allocator() = default;
-
       /// Allocate a requested amount of memory
       pointer allocate( size_type n, const void* = nullptr ) {
          return static_cast< pointer >(
@@ -52,8 +51,8 @@ namespace detray::cuda {
          cuda_deallocate( ptr );
       }
 
-   }; // class managed_allocator
+   }; // class host_allocator
 
 } // namespace detray::cuda
 
-#endif // DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
+#endif // DETRAY_DATA_MODEL_HOST_ALLOCATOR_HPP

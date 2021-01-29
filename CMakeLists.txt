@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+# Copyright (C) 2021 Attila Krasznahorkay.
 
 # Set up the project.
 cmake_minimum_required( VERSION 3.10 )
@@ -15,6 +15,8 @@ include( GNUInstallDirs )
 # Build a (static) library with the data model code.
 add_library( DetrayCudaDataModel
    core/cuda_error_check.cuh core/cuda_error_check.cu
+   allocators/host_allocator_base.hpp allocators/host_allocator_base.cu
+   allocators/host_allocator.hpp
    allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu
    allocators/managed_allocator.hpp
    vector/vector.hpp )

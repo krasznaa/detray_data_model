@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+// Copyright (C) 2021 Attila Krasznahorkay.
 
 // Local include(s).
 #include "managed_allocator_base.hpp"

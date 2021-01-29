@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+// Copyright (C) 2021 Attila Krasznahorkay.
 
 // Local include(s).
 #include "core/cuda_error_check.cuh"

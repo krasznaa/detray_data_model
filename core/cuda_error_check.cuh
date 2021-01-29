@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+// Copyright (C) 2021 Attila Krasznahorkay.
 #ifndef DETRAY_DATA_MODEL_CUDA_ERROR_CHECK_CUH
 #define DETRAY_DATA_MODEL_CUDA_ERROR_CHECK_CUH
 

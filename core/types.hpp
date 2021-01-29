@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+// Copyright (C) 2021 Attila Krasznahorkay.
 #ifndef DETRAY_DATA_MODEL_TYPES_HPP
 #define DETRAY_DATA_MODEL_TYPES_HPP
 

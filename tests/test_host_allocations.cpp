@@ -1,6 +1,7 @@
-// Copyright (C) 2021 Attila Krasznahorkay. All rights reserved.
+// Copyright (C) 2021 Attila Krasznahorkay.
 
 // Local include(s).
+#include "allocators/host_allocator.hpp"
 #include "allocators/managed_allocator.hpp"
 #include "vector/vector.hpp"
 
@@ -15,7 +16,19 @@ static const std::size_t VEC_ELEMENTS = 100;
 
 int main() {
 
-   // Create a test object.
+   // Create a test object with the host allocator.
+   std::vector< float, detray::cuda::host_allocator< float > > host_vector;
+
+   // Make sure that it behaves correctly.
+   for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {
+      host_vector.push_back( 1.0f * i );
+   }
+   assert( host_vector.size() == VEC_ELEMENTS );
+   for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {
+      assert( std::abs( host_vector.at( i ) - 1.0f * i ) < 0.001 );
+   }
+
+   // Create a test object with the managed allocator.
    std::vector< float, detray::cuda::managed_allocator< float > >
       managed_vector;
 
