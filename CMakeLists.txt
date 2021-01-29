@@ -19,6 +19,7 @@ add_library( DetrayCudaDataModel
    allocators/host_allocator.hpp
    allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu
    allocators/managed_allocator.hpp
+   detector/dummy_detector.hpp
    vector/vector.hpp )
 target_include_directories( DetrayCudaDataModel PUBLIC
    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
@@ -35,3 +36,9 @@ add_executable( test_vector_on_device tests/test_vector_on_device.cu )
 target_link_libraries( test_vector_on_device DetrayCudaDataModel )
 add_test( NAME test_vector_on_device
        COMMAND test_vector_on_device )
+
+# Build a pure C++ test for the dummy detector type.
+add_executable( test_detector tests/test_detector.cpp )
+target_link_libraries( test_detector DetrayCudaDataModel )
+add_test( NAME test_detector
+       COMMAND test_detector )
