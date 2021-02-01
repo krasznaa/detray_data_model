@@ -2,9 +2,6 @@
 #ifndef DETRAY_DATA_MODEL_DUMMY_DETECTOR_HPP
 #define DETRAY_DATA_MODEL_DUMMY_DETECTOR_HPP
 
-// Local include(s).
-#include "vector/array_vector.hpp"
-
 // System include(s).
 #include <algorithm>
 #include <vector>
@@ -64,30 +61,6 @@ namespace detray {
       std::size_t m_nVolumes;
 
    }; // struct dummy_detector_data
-
-   /// Traits for figuring out the maximum size of a vector type.
-   /// Yeah... I went a bit too far with these... :-P
-   template< class T >
-   struct is_array_vector {
-      static constexpr bool value =
-         decltype( is_array_vector::test( T() ) )::value;
-   private:
-      template< typename V, std::size_t S >
-      static std::true_type test( array_vector< V, S > );
-      static std::false_type test(...);
-   };
-
-   template< typename T, bool >
-   struct array_vector_size_base {
-      static const std::size_t value = 0;
-   };
-   template< typename T >
-   struct array_vector_size_base< T, true > {
-      static const std::size_t value = T::array_max_size;
-   };
-   template< typename T >
-   struct array_vector_size :
-      public array_vector_size_base< T, is_array_vector< T >::value > {};
 
    /// "Detector" type used to experiment with vector handling
    ///

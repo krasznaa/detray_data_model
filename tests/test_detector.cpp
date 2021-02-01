@@ -2,15 +2,16 @@
 
 // Local include(s).
 #include "detector/dummy_detector.hpp"
+#include "vector/static_vector.hpp"
 
 // System include(s).
 #include <iostream>
 
 /// Fixed sized detray::array_vector type.
 template< typename TYPE >
-class device_volume_vector : public detray::array_vector< TYPE, 100 > {
+class device_volume_vector : public detray::static_vector< TYPE, 100 > {
 public:
-   using detray::array_vector< TYPE, 100 >::array_vector;
+   using detray::static_vector< TYPE, 100 >::static_vector;
 };
 
 int main() {

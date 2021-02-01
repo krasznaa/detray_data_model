@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_ARRAY_VECTOR_HPP
-#define DETRAY_DATA_MODEL_ARRAY_VECTOR_HPP
+#ifndef DETRAY_DATA_MODEL_STATIC_VECTOR_HPP
+#define DETRAY_DATA_MODEL_STATIC_VECTOR_HPP
 
 // Local include(s).
 #include "core/types.hpp"
@@ -17,7 +17,7 @@ namespace detray {
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
    template< typename TYPE, std::size_t MAX_SIZE >
-   class array_vector {
+   class static_vector {
 
    public:
       /// @name Type definitions mimicking @c std::vector
@@ -40,7 +40,7 @@ namespace detray {
 
       /// Default constructor
       DETRAY_HOST_AND_DEVICE
-      array_vector( std::size_t size = 0 ) : m_size( size ) {}
+      static_vector( std::size_t size = 0 ) : m_size( size ) {}
 
       /// @name Vector element access functions
       /// @{
@@ -158,8 +158,8 @@ namespace detray {
       /// Array that holds the PoD elements of the vector
       array_type m_elements;
 
-   }; // class array_vector
+   }; // class static_vector
 
 } // namespace detray
 
-#endif // DETRAY_DATA_MODEL_ARRAY_VECTOR_HPP
+#endif // DETRAY_DATA_MODEL_STATIC_VECTOR_HPP
