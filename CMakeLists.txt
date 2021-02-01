@@ -8,6 +8,10 @@ project( DetrayDataModel VERSION 0.0.1 LANGUAGES CXX CUDA )
 set( CMAKE_CXX_STANDARD 17 CACHE STRING "The (host) C++ standard to use" )
 set( CMAKE_CUDA_STANDARD 14 CACHE STRING "The (CUDA) C++ standard to use" )
 
+# Explicitly set the CUDA architecture to build for. Needed by CMake 3.18+.
+set( CMAKE_CUDA_ARCHITECTURES "52" CACHE STRING
+   "CUDA architecture(s) to build device code for" )
+
 # Standard CMake include(s).
 include( CTest )
 include( GNUInstallDirs )
