@@ -4,6 +4,7 @@
 
 // Local include(s).
 #include "core/types.hpp"
+#include "vector/host_vector.hpp"
 
 // System include(s).
 #include <algorithm>
@@ -22,15 +23,8 @@ namespace detray {
 
    }; // struct dummy_surface
 
-   /// Default vector type, using @c std::vector
-   template< typename T >
-   class default_vector : public std::vector< T > {
-   public:
-      using std::vector< T >::vector;
-   };
-
    /// Dummy volume type
-   template< template< typename > class volume_vector = default_vector >
+   template< template< typename > class volume_vector = host_vector >
    struct dummy_volume {
 
       /// Default constructor
@@ -51,7 +45,7 @@ namespace detray {
    }; // class dummy_volume
 
    /// PoD with pointers to all memory blocks used by the detector description
-   template< template< typename > class volume_vector = default_vector >
+   template< template< typename > class volume_vector = host_vector >
    struct dummy_detector_data {
 
       /// Type for the surface objects in memory
@@ -74,8 +68,8 @@ namespace detray {
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
-   template< template< typename > class detector_vector = default_vector,
-             template< typename > class volume_vector = default_vector >
+   template< template< typename > class detector_vector = host_vector,
+             template< typename > class volume_vector = host_vector >
    class dummy_detector {
 
    public:
@@ -88,12 +82,13 @@ namespace detray {
       using volume = dummy_volume< volume_vector >;
 
       /// Default constructor
-      DETRAY_HOST_AND_DEVICE
+      DETRAY_HOST
       dummy_detector() {}
 
       /// Copy constructor
       template< template< typename > class parent_detector_vector,
                 template< typename > class parent_volume_vector >
+      DETRAY_HOST
       dummy_detector( const dummy_detector< parent_detector_vector,
                                             parent_volume_vector >& parent )
       : m_surfaces( parent.m_surfaces.size() ),
@@ -113,6 +108,28 @@ namespace detray {
       dummy_detector( const dummy_detector_data< volume_vector >& data )
       : m_surfaces( data.m_nSurfaces, data.m_surfaces ),
         m_volumes( data.m_nVolumes, data.m_volumes ) {}
+
+      /// Assignment operator
+      template< template< typename > class parent_detector_vector,
+                template< typename > class parent_volume_vector >
+      DETRAY_HOST
+      dummy_detector< detector_vector, volume_vector >&
+      operator=( const dummy_detector< parent_detector_vector,
+                                       parent_volume_vector >& rhs ) {
+         // Prevent self-assignment.
+         if( &rhs == this ) {
+            return *this;
+         }
+         // Copy the payload.
+         m_surfaces.resize( rhs.m_surfaces.size() );
+         std::copy( std::begin( rhs.m_surfaces ), std::end( rhs.m_surfaces ),
+                    std::begin( m_surfaces ) );
+         m_volumes.resize( rhs.m_volumes.size() );
+         std::copy( std::begin( rhs.m_volumes ), std::end( rhs.m_volumes ),
+                    std::begin( m_volumes ) );
+         // Return this object.
+         return *this;
+      }
 
       /// Accessor to the surface vector
       DETRAY_HOST_AND_DEVICE

@@ -7,21 +7,14 @@
 // System include(s).
 #include <iostream>
 
-/// Fixed sized detray::array_vector type.
-template< typename TYPE >
-class device_volume_vector : public detray::static_vector< TYPE, 100 > {
-public:
-   using detray::static_vector< TYPE, 100 >::static_vector;
-};
+/// Vector type to be used in the volumes.
+template< typename T >
+using static_volume_vector = detray::static_vector< T, 100 >;
 
 int main() {
 
-   /// Type for the detector on the host.
-   using host_detector = detray::dummy_detector< detray::default_vector,
-                                                 detray::default_vector >;
-
    // Create a detector object, and fill it with some nonsensical data.
-   host_detector hdet1;
+   detray::dummy_detector<> hdet1;
    for( int i = 0; i < 10; ++i ) {
       hdet1.surfaces().emplace_back( i, i + 1 );
    }
@@ -33,8 +26,8 @@ int main() {
    }
 
    /// Detector type with a fixed sized volume vector/array, on the host
-   using host_fixed_detector = detray::dummy_detector< detray::default_vector,
-                                                       device_volume_vector >;
+   using host_fixed_detector = detray::dummy_detector< detray::host_vector,
+                                                       static_volume_vector >;
 
    // Create a detector object with "fixed internal sizes".
    host_fixed_detector hdet2 = hdet1;
@@ -46,7 +39,7 @@ int main() {
    // Print some stuff, just to check whether things look as they should.
    //
    std::cout << "sizeof(host_detector::volume) = "
-             << sizeof( host_detector::volume ) << std::endl;
+             << sizeof( detray::dummy_detector<>::volume ) << std::endl;
    std::cout << "sizeof(host_fixed_detector::volume) = "
              << sizeof( host_fixed_detector::volume ) << std::endl;
    std::cout << "m_surfaces = " << hdet_data.m_surfaces

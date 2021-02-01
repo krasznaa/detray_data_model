@@ -72,17 +72,11 @@ void copy_host_to_device( const detray::dummy_detector_data< volume_vector >& ho
    return;
 }
 
-/// Fixed sized detray::array_vector type.
-template< typename TYPE >
-class device_volume_vector : public detray::static_vector< TYPE, 20 > {
-public:
-   using detray::static_vector< TYPE, 20 >::static_vector;
-};
-
 /// Kernel doing something nonsensical with the detector geometry
+template< template< typename > class volume_vector >
 __global__
 void testDetectorKernel( std::size_t size, int* array,
-                         detray::dummy_detector_data< device_volume_vector > detData ) {
+                         detray::dummy_detector_data< volume_vector > detData ) {
 
    // Skip invalid elements.
    const std::size_t i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -93,7 +87,7 @@ void testDetectorKernel( std::size_t size, int* array,
    // Create a smart detector object on top of the data in global device memory.
    using device_fixed_detector =
       detray::dummy_detector< detray::cuda::const_device_vector,
-                              device_volume_vector >;
+                              volume_vector >;
    device_fixed_detector det( detData );
 
    // Construct a helper object on top of the array.
@@ -122,11 +116,15 @@ std::ostream& operator<<( std::ostream& out, const std::vector< T, A >& vec ) {
    return out;
 }
 
+/// Vector type to be used in the volumes.
+template< typename T >
+using static_volume_vector = detray::static_vector< T, 20 >;
+
 int main() {
 
    /// Detector type with a fixed sized volume vector/array, on the host
-   using host_fixed_detector = detray::dummy_detector< detray::default_vector,
-                                                       device_volume_vector >;
+   using host_fixed_detector = detray::dummy_detector< detray::host_vector,
+                                                       static_volume_vector >;
 
    // Create a detector object, and fill it with some nonsensical data.
    host_fixed_detector hdet;
@@ -141,7 +139,7 @@ int main() {
    }
 
    // Copy the detector's payload to the device.
-   dummy_device_detector_data< device_volume_vector > deviceData;
+   dummy_device_detector_data< static_volume_vector > deviceData;
    copy_host_to_device( hdet.data(), deviceData );
 
    // Allocate a simple array that the kernel could write to.

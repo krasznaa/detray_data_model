@@ -30,7 +30,8 @@ add_library( DetrayCudaDataModel
    allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu
    allocators/managed_allocator.hpp
    detector/dummy_detector.hpp
-   vector/device_vector.hpp vector/static_vector.hpp )
+   vector/const_device_vector.hpp vector/device_vector.hpp
+   vector/host_vector.hpp vector/static_vector.hpp )
 target_include_directories( DetrayCudaDataModel PUBLIC
    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> )
