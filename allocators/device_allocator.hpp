@@ -1,9 +1,9 @@
 // Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
-#define DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
+#ifndef DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP
+#define DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP
 
 // Local include(s).
-#include "managed_allocator_base.hpp"
+#include "device_allocator_base.hpp"
 
 // System include(s).
 #include <cstddef>
@@ -16,7 +16,7 @@ namespace detray::cuda {
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
    template< typename TYPE >
-   class managed_allocator : public managed_allocator_base {
+   class device_allocator : public device_allocator_base {
 
    public:
       /// @name Type definitions that need to be provided by the allocator
@@ -47,8 +47,16 @@ namespace detray::cuda {
          cuda_deallocate( ptr );
       }
 
-   }; // class managed_allocator
+      /// Prevent writing anything to the allocated area after the allocation
+      ///
+      /// This prevents for instance @c std::vector<T>::resize from trying to
+      /// initialise the allocated memory to some default values.
+      ///
+      template< typename U, typename... Args >
+      void construct( U*, Args&&... ) {}
+
+   }; // class device_allocator
 
 } // namespace detray::cuda
 
-#endif // DETRAY_DATA_MODEL_MANAGED_ALLOCATOR_HPP
+#endif // DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP

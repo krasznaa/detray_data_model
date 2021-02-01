@@ -12,6 +12,10 @@ set( CMAKE_CUDA_STANDARD 14 CACHE STRING "The (CUDA) C++ standard to use" )
 set( CMAKE_CUDA_ARCHITECTURES "52" CACHE STRING
    "CUDA architecture(s) to build device code for" )
 
+# Make sure that in debug mode the CUDA device code would also get debug
+# symbols attached.
+set( CMAKE_CUDA_FLAGS_DEBUG "-G" CACHE STRING "(Extra) Debug flags for CUDA" )
+
 # Standard CMake include(s).
 include( CTest )
 include( GNUInstallDirs )
@@ -19,6 +23,8 @@ include( GNUInstallDirs )
 # Build a (static) library with the data model code.
 add_library( DetrayCudaDataModel
    core/cuda_error_check.cuh core/cuda_error_check.cu
+   allocators/device_allocator_base.hpp allocators/device_allocator_base.cu
+   allocators/device_allocator.hpp
    allocators/host_allocator_base.hpp allocators/host_allocator_base.cu
    allocators/host_allocator.hpp
    allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu

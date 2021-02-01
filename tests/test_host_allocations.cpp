@@ -1,6 +1,7 @@
 // Copyright (C) 2021 Attila Krasznahorkay.
 
 // Local include(s).
+#include "allocators/device_allocator.hpp"
 #include "allocators/host_allocator.hpp"
 #include "allocators/managed_allocator.hpp"
 #include "vector/device_vector.hpp"
@@ -69,6 +70,15 @@ int main() {
       assert( std::abs( value - 1.0f * i ) < 0.001 );
       ++i;
    }
+
+   // Create a "device vector". Note that one must not actually write directly
+   // to such an object. It is really only used for memory management...
+   std::vector< float, detray::cuda::device_allocator< float > > device_vector;
+   // Change its size a couple of times, just to see that it would work.
+   device_vector.resize( 20 );
+   device_vector.reserve( 1000 );
+   device_vector.resize( 500 );
+   device_vector.resize( 5 );
 
    // Return gracefully.
    return 0;
