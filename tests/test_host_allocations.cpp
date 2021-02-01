@@ -1,10 +1,15 @@
-// Copyright (C) 2021 Attila Krasznahorkay.
+/** Detray Data Model project, part of the ACTS project (R&D line)
+ *
+ * (c) 2021 CERN for the benefit of the ACTS project
+ *
+ * Mozilla Public License Version 2.0
+ */
 
 // Local include(s).
-#include "allocators/device_allocator.hpp"
-#include "allocators/host_allocator.hpp"
-#include "allocators/managed_allocator.hpp"
-#include "vector/device_vector.hpp"
+#include "detraydm/allocators/device_allocator.hpp"
+#include "detraydm/allocators/host_allocator.hpp"
+#include "detraydm/allocators/managed_allocator.hpp"
+#include "detraydm/containers/device_vector.hpp"
 
 // System include(s).
 #undef NDEBUG
@@ -18,7 +23,7 @@ static const std::size_t VEC_ELEMENTS = 100;
 int main() {
 
    // Create a test object with the host allocator.
-   std::vector< float, detray::cuda::host_allocator< float > > host_vector;
+   std::vector< float, detraydm::cuda::host_allocator< float > > host_vector;
 
    // Make sure that it behaves correctly.
    for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {
@@ -30,7 +35,7 @@ int main() {
    }
 
    // Create a test object with the managed allocator.
-   std::vector< float, detray::cuda::managed_allocator< float > >
+   std::vector< float, detraydm::cuda::managed_allocator< float > >
       managed_vector;
 
    // Fill it with some data.
@@ -41,8 +46,8 @@ int main() {
    assert( std::abs( managed_vector[ 20 ] - 20.0f ) < 0.001 );
 
    // Create a "kernel vector".
-   detray::cuda::device_vector< float > kernel_vector( managed_vector.size(),
-                                                       managed_vector.data() );
+   detraydm::cuda::device_vector< float >
+      kernel_vector( managed_vector.size(), managed_vector.data() );
    // Test its most basic features.
    assert( kernel_vector.size() == VEC_ELEMENTS );
    for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {
@@ -73,7 +78,8 @@ int main() {
 
    // Create a "device vector". Note that one must not actually write directly
    // to such an object. It is really only used for memory management...
-   std::vector< float, detray::cuda::device_allocator< float > > device_vector;
+   std::vector< float, detraydm::cuda::device_allocator< float > >
+      device_vector;
    // Change its size a couple of times, just to see that it would work.
    device_vector.resize( 20 );
    device_vector.reserve( 1000 );

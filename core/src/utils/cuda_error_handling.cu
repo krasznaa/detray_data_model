@@ -1,7 +1,12 @@
-// Copyright (C) 2021 Attila Krasznahorkay.
+/** Detray Data Model project, part of the ACTS project (R&D line)
+ *
+ * (c) 2021 CERN for the benefit of the ACTS project
+ *
+ * Mozilla Public License Version 2.0
+ */
 
 // Local include(s).
-#include "cuda_error_check.cuh"
+#include "detraydm/utils/cuda_error_handling.hpp"
 
 // CUDA include(s).
 #include <cuda_runtime.h>
@@ -11,7 +16,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace detray::cuda::details {
+namespace detraydm::cuda::details {
 
    void throw_error( cudaError_t errorCode, const char* expression,
                      const char* file, int line ) {
@@ -25,4 +30,4 @@ namespace detray::cuda::details {
       throw std::runtime_error( errorMsg.str() );
    }
 
-} // namespace detray::cuda::details
+} // namespace detraydm::cuda::details

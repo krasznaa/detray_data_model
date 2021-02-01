@@ -1,22 +1,30 @@
-// Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP
-#define DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP
+/** Detray Data Model project, part of the ACTS project (R&D line)
+ *
+ * (c) 2021 CERN for the benefit of the ACTS project
+ *
+ * Mozilla Public License Version 2.0
+ */
+#pragma once
 
 // Local include(s).
-#include "device_allocator_base.hpp"
+#include "detraydm/allocators/host_allocator_base.hpp"
 
 // System include(s).
 #include <cstddef>
 #include <type_traits>
 
-namespace detray::cuda {
+namespace detraydm::cuda {
 
-   /// CUDA managed memory allocator to use with STL container types
+   /// CUDA host memory allocator to use with STL container types
+   ///
+   /// Making sure that the memory created for the STL container on the host
+   /// would be page-locked. (Not allowed to be moved to swap, or any other part
+   /// of the memory.)
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
    template< typename TYPE >
-   class device_allocator : public device_allocator_base {
+   class host_allocator : public host_allocator_base {
 
    public:
       /// @name Type definitions that need to be provided by the allocator
@@ -47,16 +55,6 @@ namespace detray::cuda {
          cuda_deallocate( ptr );
       }
 
-      /// Prevent writing anything to the allocated area after the allocation
-      ///
-      /// This prevents for instance @c std::vector<T>::resize from trying to
-      /// initialise the allocated memory to some default values.
-      ///
-      template< typename U, typename... Args >
-      void construct( U*, Args&&... ) {}
+   }; // class host_allocator
 
-   }; // class device_allocator
-
-} // namespace detray::cuda
-
-#endif // DETRAY_DATA_MODEL_DEVICE_ALLOCATOR_HPP
+} // namespace detraydm::cuda

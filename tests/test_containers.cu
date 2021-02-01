@@ -1,9 +1,14 @@
-// Copyright (C) 2021 Attila Krasznahorkay.
+/** Detray Data Model project, part of the ACTS project (R&D line)
+ *
+ * (c) 2021 CERN for the benefit of the ACTS project
+ *
+ * Mozilla Public License Version 2.0
+ */
 
 // Local include(s).
-#include "core/cuda_error_check.cuh"
-#include "allocators/managed_allocator.hpp"
-#include "vector/device_vector.hpp"
+#include "detraydm/utils/cuda_error_handling.hpp"
+#include "detraydm/allocators/managed_allocator.hpp"
+#include "detraydm/containers/device_vector.hpp"
 
 // System include(s).
 #undef NDEBUG
@@ -25,7 +30,7 @@ void addToElements( std::size_t size, float* ptr, float value ) {
    }
 
    // Construct a helper object on top of the array.
-   detray::cuda::device_vector< float > vec( size, ptr );
+   detraydm::cuda::device_vector< float > vec( size, ptr );
 
    // Modify one array element with the help of the custom vector object.
    vec.at( i ) += value;
@@ -35,7 +40,7 @@ void addToElements( std::size_t size, float* ptr, float value ) {
 int main() {
 
    // Create a test object.
-   std::vector< float, detray::cuda::managed_allocator< float > >
+   std::vector< float, detraydm::cuda::managed_allocator< float > >
       managed_vector;
    for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {
       managed_vector.push_back( 1.0f * i );
@@ -48,8 +53,8 @@ int main() {
    addToElements<<< managed_vector.size(), 1 >>>( managed_vector.size(),
                                                   managed_vector.data(),
                                                   CONSTANT );
-   DETRAY_CUDA_ERROR_CHECK( cudaGetLastError() );
-   DETRAY_CUDA_ERROR_CHECK( cudaDeviceSynchronize() );
+   DETRAYDM_CUDA_ERROR_CHECK( cudaGetLastError() );
+   DETRAYDM_CUDA_ERROR_CHECK( cudaDeviceSynchronize() );
 
    // Make sure that the memory modification worked.
    for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {

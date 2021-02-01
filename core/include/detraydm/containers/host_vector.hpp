@@ -1,11 +1,15 @@
-// Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_HOST_VECTOR_HPP
-#define DETRAY_DATA_MODEL_HOST_VECTOR_HPP
+/** Detray Data Model project, part of the ACTS project (R&D line)
+ *
+ * (c) 2021 CERN for the benefit of the ACTS project
+ *
+ * Mozilla Public License Version 2.0
+ */
+#pragma once
 
 // System include(s).
 #include <vector>
 
-namespace detray {
+namespace detraydm {
 
    /// Vector type to use "on the host"
    ///
@@ -15,6 +19,4 @@ namespace detray {
    template< typename T >
    using host_vector = std::vector< T >;
 
-} // namespace detray
-
-#endif // DETRAY_DATA_MODEL_HOST_VECTOR_HPP
+} // namespace detraydm

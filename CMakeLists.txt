@@ -1,8 +1,15 @@
-# Copyright (C) 2021 Attila Krasznahorkay.
+# Detray Data Model project, part of the ACTS project (R&D line)
+#
+# (c) 2021 CERN for the benefit of the ACTS project
+#
+# Mozilla Public License Version 2.0
 
 # Set up the project.
 cmake_minimum_required( VERSION 3.10 )
-project( DetrayDataModel VERSION 0.0.1 LANGUAGES CXX CUDA )
+project( detray_data_model VERSION 0.0.1 LANGUAGES CXX CUDA )
+
+# Standard CMake include(s).
+include( GNUInstallDirs )
 
 # Set up the used C++ standard(s).
 set( CMAKE_CXX_STANDARD 17 CACHE STRING "The (host) C++ standard to use" )
@@ -16,46 +23,44 @@ set( CMAKE_CUDA_ARCHITECTURES "52" CACHE STRING
 # symbols attached.
 set( CMAKE_CUDA_FLAGS_DEBUG "-G" )
 
-# Standard CMake include(s).
+# Explicitly set the output directory for the binaries.
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}" CACHE PATH
+   "Directory for the built binaries" )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH
+   "Directory for the built libraries" )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+   "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH
+   "Directory for the built static libraries" )
+
+# Add the sub-directories.
+add_subdirectory( core )
+
+# Export the configuration of the project.
+include( CMakePackageConfigHelpers )
+set( CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/detraydm" )
+install( EXPORT detraydm
+   NAMESPACE "detraydm::"
+   FILE "detraydm-config-targets.cmake"
+   DESTINATION "${CMAKE_INSTALL_CMAKEDIR}" )
+configure_package_config_file(
+   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/detraydm-config.cmake.in"
+   "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/detraydm-config.cmake"
+   INSTALL_DESTINATION "${CMAKE_INSTALL_CMAKEDIR}"
+   PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+             CMAKE_INSTALL_CMAKEDIR
+   NO_CHECK_REQUIRED_COMPONENTS_MACRO )
+write_basic_package_version_file(
+   "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/detraydm-config-version.cmake"
+   COMPATIBILITY "AnyNewerVersion" )
+install( FILES
+"${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/detraydm-config.cmake"
+   "${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/detraydm-config-version.cmake"
+   DESTINATION "${CMAKE_INSTALL_CMAKEDIR}" )
+
+# Set up the test(s).
 include( CTest )
-include( GNUInstallDirs )
-
-# Build a (static) library with the data model code.
-add_library( DetrayCudaDataModel
-   core/cuda_error_check.cuh core/cuda_error_check.cu
-   allocators/device_allocator_base.hpp allocators/device_allocator_base.cu
-   allocators/device_allocator.hpp
-   allocators/host_allocator_base.hpp allocators/host_allocator_base.cu
-   allocators/host_allocator.hpp
-   allocators/managed_allocator_base.hpp allocators/managed_allocator_base.cu
-   allocators/managed_allocator.hpp
-   detector/dummy_detector.hpp
-   vector/const_device_vector.hpp vector/device_vector.hpp
-   vector/host_vector.hpp vector/static_vector.hpp )
-target_include_directories( DetrayCudaDataModel PUBLIC
-   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
-   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> )
-
-# Build the test for using the allocator(s) in the host code.
-add_executable( test_host_allocations tests/test_host_allocations.cpp )
-target_link_libraries( test_host_allocations DetrayCudaDataModel )
-add_test( NAME test_host_allocations
-       COMMAND test_host_allocations )
-
-# Build the test for using the custom vector in device code.
-add_executable( test_vector_on_device tests/test_vector_on_device.cu )
-target_link_libraries( test_vector_on_device DetrayCudaDataModel )
-add_test( NAME test_vector_on_device
-       COMMAND test_vector_on_device )
-
-# Build a pure C++ test for the dummy detector type.
-add_executable( test_detector tests/test_detector.cpp )
-target_link_libraries( test_detector DetrayCudaDataModel )
-add_test( NAME test_detector
-       COMMAND test_detector )
-
-# Build an "on device" test for the dummy detector type.
-add_executable( test_detector_on_device tests/test_detector_on_device.cu )
-target_link_libraries( test_detector_on_device DetrayCudaDataModel )
-add_test( NAME test_detector_on_device
-       COMMAND test_detector_on_device )
+if( BUILD_TESTING )
+   add_subdirectory( tests )
+endif()
