@@ -3,7 +3,7 @@
 // Local include(s).
 #include "allocators/host_allocator.hpp"
 #include "allocators/managed_allocator.hpp"
-#include "vector/vector.hpp"
+#include "vector/device_vector.hpp"
 
 // System include(s).
 #undef NDEBUG
@@ -40,8 +40,8 @@ int main() {
    assert( std::abs( managed_vector[ 20 ] - 20.0f ) < 0.001 );
 
    // Create a "kernel vector".
-   detray::cuda::vector< float > kernel_vector( managed_vector.size(),
-                                                managed_vector.data() );
+   detray::cuda::device_vector< float > kernel_vector( managed_vector.size(),
+                                                       managed_vector.data() );
    // Test its most basic features.
    assert( kernel_vector.size() == VEC_ELEMENTS );
    for( std::size_t i = 0; i < VEC_ELEMENTS; ++i ) {

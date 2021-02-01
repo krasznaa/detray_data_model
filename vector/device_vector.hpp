@@ -1,6 +1,6 @@
 // Copyright (C) 2021 Attila Krasznahorkay.
-#ifndef DETRAY_DATA_MODEL_VECTOR_HPP
-#define DETRAY_DATA_MODEL_VECTOR_HPP
+#ifndef DETRAY_DATA_MODEL_DEVICE_VECTOR_HPP
+#define DETRAY_DATA_MODEL_DEVICE_VECTOR_HPP
 
 // Local include(s).
 #include "core/types.hpp"
@@ -16,7 +16,7 @@ namespace detray::cuda {
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
    template< typename TYPE >
-   class vector {
+   class device_vector {
 
    public:
       /// @name Type definitions mimicking @c std::vector
@@ -37,7 +37,7 @@ namespace detray::cuda {
 
       /// Constructor, on top of a previously allocated/filled block of memory
       DETRAY_HOST_AND_DEVICE
-      vector( size_type size, pointer ptr )
+      device_vector( size_type size, pointer ptr )
       : m_size( size ), m_ptr( ptr ) {}
 
       /// @name Vector element access functions
@@ -156,8 +156,8 @@ namespace detray::cuda {
       /// Pointer to the start of the array
       pointer m_ptr;
 
-   }; // class vector
+   }; // class device_vector
 
 } // namespace detray::cuda
 
-#endif // DETRAY_DATA_MODEL_VECTOR_HPP
+#endif // DETRAY_DATA_MODEL_DEVICE_VECTOR_HPP

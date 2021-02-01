@@ -3,7 +3,7 @@
 // Local include(s).
 #include "core/cuda_error_check.cuh"
 #include "allocators/managed_allocator.hpp"
-#include "vector/vector.hpp"
+#include "vector/device_vector.hpp"
 
 // System include(s).
 #undef NDEBUG
@@ -25,7 +25,7 @@ void addToElements( std::size_t size, float* ptr, float value ) {
    }
 
    // Construct a helper object on top of the array.
-   detray::cuda::vector< float > vec( size, ptr );
+   detray::cuda::device_vector< float > vec( size, ptr );
 
    // Modify one array element with the help of the custom vector object.
    vec.at( i ) += value;
