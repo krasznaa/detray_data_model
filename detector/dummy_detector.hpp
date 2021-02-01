@@ -2,6 +2,9 @@
 #ifndef DETRAY_DATA_MODEL_DUMMY_DETECTOR_HPP
 #define DETRAY_DATA_MODEL_DUMMY_DETECTOR_HPP
 
+// Local include(s).
+#include "core/types.hpp"
+
 // System include(s).
 #include <algorithm>
 #include <vector>
@@ -51,12 +54,17 @@ namespace detray {
    template< template< typename > class volume_vector = default_vector >
    struct dummy_detector_data {
 
+      /// Type for the surface objects in memory
+      typedef dummy_surface surface_type;
+      /// Type of the volume objects in memory
+      typedef dummy_volume< volume_vector > volume_type;
+
       /// Pointer to the start of the memory block holding all the surfaces
-      const dummy_surface* m_surfaces;
+      const surface_type* m_surfaces;
       /// The number of surfaces
       std::size_t m_nSurfaces;
       /// Pointer to the start of the memory block holding all the volumes
-      const dummy_volume< volume_vector >* m_volumes;
+      const volume_type* m_volumes;
       /// The number of volumes
       std::size_t m_nVolumes;
 
@@ -80,7 +88,8 @@ namespace detray {
       using volume = dummy_volume< volume_vector >;
 
       /// Default constructor
-      dummy_detector() = default;
+      DETRAY_HOST_AND_DEVICE
+      dummy_detector() {}
 
       /// Copy constructor
       template< template< typename > class parent_detector_vector,
@@ -100,16 +109,20 @@ namespace detray {
 
       /// Constructor from a dummy data object. Only available if we use our
       /// custom vector type.
+      DETRAY_HOST_AND_DEVICE
       dummy_detector( const dummy_detector_data< volume_vector >& data )
       : m_surfaces( data.m_nSurfaces, data.m_surfaces ),
         m_volumes( data.m_nVolumes, data.m_volumes ) {}
 
       /// Accessor to the surface vector
+      DETRAY_HOST_AND_DEVICE
       detector_vector< dummy_surface >& surfaces() { return m_surfaces; }
       /// Accessor to the volume vector
+      DETRAY_HOST_AND_DEVICE
       detector_vector< volume >& volumes() { return m_volumes; }
 
       /// Function generating a PoD with the detector data
+      DETRAY_HOST
       dummy_detector_data< volume_vector > data() const {
          return { m_surfaces.data(), m_surfaces.size(),
                   m_volumes.data(), m_volumes.size() };

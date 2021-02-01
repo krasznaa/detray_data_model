@@ -84,6 +84,16 @@ namespace detray {
       }
       /// @}
 
+      /// @name Payload modification functions
+      /// @{
+      DETRAY_HOST_AND_DEVICE
+      void push_back( const_reference value ) {
+         assert( m_size + 1 <= array_max_size );
+         m_elements[ m_size ] = value;
+         ++m_size;
+      }
+      /// @}
+
       /// @name Iterator providing functions
       /// @{
       DETRAY_HOST

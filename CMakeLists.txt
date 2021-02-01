@@ -14,7 +14,7 @@ set( CMAKE_CUDA_ARCHITECTURES "52" CACHE STRING
 
 # Make sure that in debug mode the CUDA device code would also get debug
 # symbols attached.
-set( CMAKE_CUDA_FLAGS_DEBUG "-G" CACHE STRING "(Extra) Debug flags for CUDA" )
+set( CMAKE_CUDA_FLAGS_DEBUG "-G" )
 
 # Standard CMake include(s).
 include( CTest )
@@ -52,3 +52,9 @@ add_executable( test_detector tests/test_detector.cpp )
 target_link_libraries( test_detector DetrayCudaDataModel )
 add_test( NAME test_detector
        COMMAND test_detector )
+
+# Build an "on device" test for the dummy detector type.
+add_executable( test_detector_on_device tests/test_detector_on_device.cu )
+target_link_libraries( test_detector_on_device DetrayCudaDataModel )
+add_test( NAME test_detector_on_device
+       COMMAND test_detector_on_device )
