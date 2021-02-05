@@ -9,7 +9,7 @@ add_library( detraydm_core
    # STL allocators.
    "include/detraydm/allocators/device_allocator_base.hpp"
    "include/detraydm/allocators/device_allocator.hpp"
-   "src/allocators/device_allocator_base.cu"
+   "src/allocators/device_allocator_base.cpp"
    "include/detraydm/allocators/host_allocator_base.hpp"
    "include/detraydm/allocators/host_allocator.hpp"
    "src/allocators/host_allocator_base.cu"

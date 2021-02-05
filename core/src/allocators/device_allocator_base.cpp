@@ -7,23 +7,19 @@
 
 // Local include(s).
 #include "detraydm/allocators/device_allocator_base.hpp"
-#include "detraydm/utils/cuda_error_handling.hpp"
-
-// CUDA include(s).
-#include <cuda_runtime.h>
+#include "detraydm/memory/memory_manager.hpp"
+#include "detraydm/memory/memory_manager_interface.hpp"
 
 namespace detraydm::cuda {
 
    void* device_allocator_base::cuda_allocate( std::size_t nBytes ) {
 
-      void* ptr = nullptr;
-      DETRAYDM_CUDA_ERROR_CHECK( cudaMalloc( &ptr, nBytes ) );
-      return ptr;
+      return memory_manager::instance().get().allocate( nBytes );
    }
 
    void device_allocator_base::cuda_deallocate( void* ptr ) {
 
-      DETRAYDM_CUDA_ERROR_CHECK( cudaFree( ptr ) );
+      memory_manager::instance().get().deallocate( ptr );
    }
 
 } // namespace detraydm::cuda
