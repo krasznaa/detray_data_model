@@ -6,6 +6,7 @@
 
 # Set up the build of the (static) data model library.
 add_library( detraydm_core
+   # STL allocators.
    "include/detraydm/allocators/device_allocator_base.hpp"
    "include/detraydm/allocators/device_allocator.hpp"
    "src/allocators/device_allocator_base.cu"
@@ -15,13 +16,18 @@ add_library( detraydm_core
    "include/detraydm/allocators/managed_allocator_base.hpp"
    "include/detraydm/allocators/managed_allocator.hpp"
    "src/allocators/managed_allocator_base.cu"
+   # STL mimicking containers.
    "include/detraydm/containers/const_device_vector.hpp"
    "include/detraydm/containers/device_vector.hpp"
    "include/detraydm/containers/host_vector.hpp"
    "include/detraydm/containers/static_vector.hpp"
+   # Memory management.
    "include/detraydm/memory/memory_manager_interface.hpp"
    "include/detraydm/memory/memory_manager.hpp"
    "src/memory/memory_manager.cpp"
+   "include/detraydm/memory/cuda/arena_memory_manager.hpp"
+   "src/memory/cuda/arena_memory_manager.cu"
+   # Utilities.
    "include/detraydm/utils/cuda_error_handling.hpp"
    "src/utils/cuda_error_handling.cu"
    "include/detraydm/utils/cuda_types.hpp" )
