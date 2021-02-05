@@ -19,6 +19,9 @@ add_library( detraydm_core
    "include/detraydm/containers/device_vector.hpp"
    "include/detraydm/containers/host_vector.hpp"
    "include/detraydm/containers/static_vector.hpp"
+   "include/detraydm/memory/memory_manager_interface.hpp"
+   "include/detraydm/memory/memory_manager.hpp"
+   "src/memory/memory_manager.cpp"
    "include/detraydm/utils/cuda_error_handling.hpp"
    "src/utils/cuda_error_handling.cu"
    "include/detraydm/utils/cuda_types.hpp" )
