@@ -27,6 +27,8 @@ add_library( detraydm_core
    "src/memory/memory_manager.cpp"
    "include/detraydm/memory/cuda/arena_memory_manager.hpp"
    "src/memory/cuda/arena_memory_manager.cu"
+   "include/detraydm/memory/cuda/direct_memory_manager.hpp"
+   "src/memory/cuda/direct_memory_manager.cu"
    # Utilities.
    "include/detraydm/utils/cuda_error_handling.hpp"
    "src/utils/cuda_error_handling.cu"

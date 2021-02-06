@@ -10,21 +10,22 @@
 #include "detraydm/memory/memory_manager_interface.hpp"
 
 // System include(s).
+#include <list>
 #include <vector>
 
 namespace detraydm::cuda {
 
-   /// A very simple arena type CUDA (device) memory manager
+   /// A very simple CUDA memory manager using CUDA memory functions directly
    ///
    /// @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
    ///
-   class arena_memory_manager : public memory_manager_interface {
+   class direct_memory_manager : public memory_manager_interface {
 
    public:
       /// Constructor, allocating the default amount of memory
-      arena_memory_manager();
+      direct_memory_manager();
       /// Destructor, freeing up all allocations
-      ~arena_memory_manager();
+      ~direct_memory_manager();
 
       /// Default device, the one CUDA is set up to use at a given time
       static constexpr int DEFAULT_DEVICE = -1;
@@ -53,14 +54,8 @@ namespace detraydm::cuda {
       /// Struct describing the state of the memory allocation on a particular
       /// device
       struct device_memory {
-         /// The amount of memory allocated on the device
-         std::size_t m_size = 0;
-         /// Pointer to the beginning of the memory allocation
-         char* m_ptr = nullptr;
-         /// Pointer to the next available memory block in the "current round"
-         char* m_nextAllocation = nullptr;
-         /// The maximum amount of memory used at a time during the job
-         std::ptrdiff_t m_maxUsage = 0;
+         /// List of memory allocations on the device
+         std::list< void* > m_ptrs;
       };
 
       /// Create a valid device ID from what the user provided
@@ -72,6 +67,6 @@ namespace detraydm::cuda {
       /// Object holding information about memory allocations on all devices
       std::vector< device_memory > m_memory;
 
-   }; // class arena_memory_manager
+   }; // class direct_memory_manager
 
 } // namespace detraydm::cuda

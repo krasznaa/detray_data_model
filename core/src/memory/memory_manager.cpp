@@ -8,7 +8,7 @@
 // Local include(s).
 #include "detraydm/memory/memory_manager.hpp"
 #include "detraydm/memory/memory_manager_interface.hpp"
-#include "detraydm/memory/cuda/arena_memory_manager.hpp"
+#include "detraydm/memory/cuda/direct_memory_manager.hpp"
 
 namespace detraydm {
 
@@ -37,7 +37,7 @@ namespace detraydm {
    }
 
    memory_manager::memory_manager()
-   : m_mgr( new cuda::arena_memory_manager() ) {
+   : m_mgr( new cuda::direct_memory_manager() ) {
 
    }
 

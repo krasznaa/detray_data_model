@@ -32,7 +32,7 @@ namespace detraydm {
       virtual void* allocate( std::size_t sizeInBytes, int device = -1 ) = 0;
 
       /// Deallocate a specific memory block
-      virtual void deallocate( const void* ptr ) = 0;
+      virtual void deallocate( void* ptr ) = 0;
 
       /// Reset all allocations on a given device
       virtual void reset( int device = -1 ) = 0;

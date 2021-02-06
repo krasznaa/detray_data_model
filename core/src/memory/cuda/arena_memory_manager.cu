@@ -92,7 +92,7 @@ namespace detraydm::cuda {
       return result;
    }
 
-   void arena_memory_manager::deallocate( const void* ) {
+   void arena_memory_manager::deallocate( void* ) {
 
       // This memory manager does not do piecewise de-allocations.
       return;
